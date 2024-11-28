@@ -1,39 +1,45 @@
 steps:
-  # Step 1: Build Docker image
+  # Step 1: Authenticate with Docker Hub (optional, for private repositories)
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'Authenticate with Docker Hub'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo 'password1' | docker login -u 'monthol.chang@gmail.com' --password-stdin
+
+  # Step 2: Build the Docker image for a specific platform
   - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Docker image'
     args:
       - 'build'
+      - '--platform'
+      - 'linux/amd64'
       - '-t'
-      - 'gcr.io/utility-binder-434801-u8/flask-app:$COMMIT_SHA'
+      - 'montholch86/flask-app:latest'
       - '.'
 
-  # Step 2: Push Docker image to Google Container Registry
+  # Step 3: Push the Docker image to Docker Hub
   - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Docker image'
     args:
       - 'push'
-      - 'gcr.io/utility-binder-434801-u8/flask-app:$COMMIT_SHA'
+      - 'montholch86/flask-app:latest'
 
-  # # Step 3: Deploy to Google Compute Engine
-  # - name: 'gcr.io/cloud-builders/gcloud'
-  #   args:
-  #     - 'compute'
-  #     - 'instances'
-  #     - 'update-container'
-  #     - 'docker-container-instance'
-  #     - '--zone'
-  #     - 'us-central1-a'
-  #     - '--container-image'
-  #     - 'gcr.io/utility-binder-434801-u8/flask-app:$COMMIT_SHA'
-  #     - '--container-restart-policy'
-  #     - 'always'
+  # 4. SSH into the GCE instance using gcloud and update the Flask container
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - 'compute'
+      - 'ssh'
+      - 'monthol@changsathien-instance'
+      - '--zone'
+      - 'us-central1-a'
+      - '--command'
+      - |
+        sudo docker pull montholch86/flask-app:latest
+        sudo docker stop flask-app || true
+        sudo docker rm flask-app || true
+        sudo docker run -d --name flask-app -p 4000:4000 montholch86/flask-app:latest
 
 images:
-  - 'gcr.io/utility-binder-434801-u8/flask-app:$COMMIT_SHA'
-
-# Substitutions allow you to define variables like the commit SHA
-substitutions:
-  _COMMIT_SHA: $BUILD_ID  # This represents the commit SHA automatically provided in Cloud Build
-
-# Options for the Cloud Build setup
-options:
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+  - 'your-username/your-repository-name:latest'
