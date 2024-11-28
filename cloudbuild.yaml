@@ -43,3 +43,6 @@ steps:
 
 images:
   - 'montholch86/flask-app:latest'
+
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
