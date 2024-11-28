@@ -26,7 +26,24 @@ steps:
       - 'push'
       - 'montholch86/flask-app:latest'
 
-  # Step 4: Run the Docker container
+  # Step 4. Pull the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Pull Docker image'
+    args:
+      - 'pull'
+      - 'montholch86/flask-app:latest'
+
+  # Step 5: Stop and remove the existing container if it exists
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Stop and Remove Docker container'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        sudo docker stop flask-app || true
+        sudo docker rm flask-app || true
+
+  # Step 6: Run the Docker container
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Run Docker container'
     args:
