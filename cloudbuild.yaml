@@ -28,4 +28,4 @@ steps:
       - 'always'
 
 images:
-  - 'gcr.io/$PROJECT_ID/flask-app:$COMMIT_SHA'
+  - 'gcr.io/utility-binder-434801-u8/flask-app:$COMMIT_SHA'
