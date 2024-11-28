@@ -54,8 +54,5 @@ steps:
       - '4000:4000'
       - 'montholch86/flask-app:latest'
 
-images:
-  - 'montholch86/flask-app:latest'
-
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
