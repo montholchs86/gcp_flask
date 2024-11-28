@@ -42,4 +42,4 @@ steps:
         sudo docker run -d --name flask-app -p 4000:4000 montholch86/flask-app:latest
 
 images:
-  - 'your-username/your-repository-name:latest'
+  - 'montholch86/flask-app:latest'
