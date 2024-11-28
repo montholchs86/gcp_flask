@@ -1,8 +1,8 @@
 steps:
   # Step 1: Authenticate with Docker Hub (optional, for private repositories)
-  - name: 'gcr.io/cloud-builders/gcloud'
+  - name: 'gcr.io/cloud-builders/docker'
     id: 'Authenticate with Docker Hub'
-    entrypoint: 'bash'
+    entrypoint: 'sh'
     args:
       - '-c'
       - |
@@ -13,11 +13,10 @@ steps:
     id: 'Build Docker image'
     args:
       - 'build'
-      - '--platform'
-      - 'linux/amd64'
+      - '--platform=linux/amd64'
       - '-t'
       - 'montholch86/flask-app:latest'
-      - '.'
+      - .
 
   # Step 3: Push the Docker image to Docker Hub
   - name: 'gcr.io/cloud-builders/docker'
@@ -40,9 +39,6 @@ steps:
         sudo docker stop flask-app || true
         sudo docker rm flask-app || true
         sudo docker run -d --name flask-app -p 4000:4000 montholch86/flask-app:latest
-
-images:
-  - 'montholch86/flask-app:latest'
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
