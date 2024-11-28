@@ -46,7 +46,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Run Docker container'
     args:
-      - 'run'
+      - 'sudo docker run'
       - '-d'
       - '--name'
       - 'flask-app'
