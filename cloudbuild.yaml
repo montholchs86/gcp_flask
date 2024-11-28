@@ -28,11 +28,6 @@ steps:
   # 4. SSH into the GCE instance using gcloud and update the Flask container
   - name: gcr.io/cloud-builders/gcloud
     args:
-      - 'compute'
-      - 'ssh'
-      - 'monthol@changsathien-instance'
-      - '--zone'
-      - 'us-central1-a'
       - '--command'
       - |
         sudo docker pull montholch86/flask-app:latest
