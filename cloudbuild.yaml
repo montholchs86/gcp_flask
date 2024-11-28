@@ -45,11 +45,14 @@ steps:
   # Step 6: Run the Docker container
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Run Docker container'
-    entrypoint: 'bash'
     args:
-      - '-c'
-      - | 
-        sudo docker run -d --name flask-app -p 4000:4000 montholch86/flask-app:latest
+      - 'run'
+      - '-d'
+      - '--name'
+      - 'flask-app'
+      - '-p'
+      - '4000:4000'
+      - 'montholch86/flask-app:latest'
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
